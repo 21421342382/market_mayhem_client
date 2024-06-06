@@ -9,11 +9,12 @@ app.post('/investment', async (req, res) => {
 
     try {
         // Send the investment data to the main chart server
-        await axios.post('http://localhost:4000/newInvestment', investment);
+        const url = await axios.post('https://market-mayhem-main.onrender.com/investment', investment);
+        console.log(url)
         res.status(200).send('Investment processed successfully');
     } catch (error) {
         res.status(500).send('Error processing investment');
     }
 });
 
-app.listen(4000, () => console.log('User actions server listening on port 5000'));
+app.listen(4000, () => console.log('User actions server listening on port 4000'));
