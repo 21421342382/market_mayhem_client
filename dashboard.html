@@ -1,0 +1,104 @@
+<!-- dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+</head>
+<body>
+    <h1>Admin Panel</h1>
+    <button id="startBtn">Start Bot</button>
+    <button id="stopBtn">Stop Bot</button>
+    
+    <h2>Market Moves</h2>
+    <select id="marketMoveSelect">
+        <option value="normal">Normal</option>
+        <option value="uptrend">Uptrend</option>
+        <option value="downtrend">Downtrend</option>
+        <option value="bullish">Bullish</option>
+    </select>
+    <button id="applyMoveBtn">Apply Market Move</button>
+
+    <h2>Starting Point</h2>
+    <input type="number" id="startingAmount" placeholder="Enter starting amount">
+    <button id="applyStartingPointBtn">Apply Starting Point</button>
+
+    <script>
+        function startBot() {
+            fetch('/start-bot', { method: 'POST' })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Bot started successfully.');
+                    } else {
+                        console.error('Failed to start bot.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error starting bot:', error);
+                });
+        }
+
+        function stopBot() {
+            fetch('/stop-bot', { method: 'POST' })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Bot stopped successfully.');
+                    } else {
+                        console.error('Failed to stop bot.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error stopping bot:', error);
+                });
+        }
+
+        function applyMarketMove() {
+            const marketMove = document.getElementById('marketMoveSelect').value;
+            fetch('/apply-market-move', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ marketMove })
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Market move applied successfully.');
+                } else {
+                    console.error('Failed to apply market move.');
+                }
+            })
+            .catch(error => {
+                console.error('Error applying market move:', error);
+            });
+        }
+
+        function applyStartingPoint() {
+            const startingAmount = document.getElementById('startingAmount').value;
+            fetch('/apply-starting-point', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ startingAmount })
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Starting point applied successfully.');
+                } else {
+                    console.error('Failed to apply starting point.');
+                }
+            })
+            .catch(error => {
+                console.error('Error applying starting point:', error);
+            });
+        }
+
+        document.getElementById('startBtn').addEventListener('click', startBot);
+        document.getElementById('stopBtn').addEventListener('click', stopBot);
+        document.getElementById('applyMoveBtn').addEventListener('click', applyMarketMove);
+        document.getElementById('applyStartingPointBtn').addEventListener('click', applyStartingPoint);
+    </script>
+</body>
+</html>
