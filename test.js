@@ -9,9 +9,11 @@ function generateRandomInvestment(previousAmount) {
   // Random variation between -10 and 10
   let variation = (Math.random() - 0.5) * 20; 
 
-  // Randomly trigger a huge market cap event (1% chance)
-  if (Math.random() < 0.01) { // 1% chance of a huge market cap event
-    variation += (Math.random() * 200) + 200; // Increase by a random amount between 200 and 400
+  // Randomly trigger a market cap event (5% chance)
+  if (Math.random() < 0.05) { // 5% chance of a market cap event
+    // Randomly decide whether the event is positive or negative
+    const eventSign = Math.random() < 0.5 ? -1 : 1;
+    variation += eventSign * (Math.random() * 200 + 200); // Increase or decrease by a random amount between 200 and 400
   }
 
   const amount = previousAmount + variation;
