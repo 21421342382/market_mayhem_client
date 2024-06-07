@@ -1,4 +1,3 @@
-// bot.js
 const axios = require('axios');
 
 let botInterval;
@@ -50,7 +49,8 @@ function generateRandomInvestment(previousAmount) {
     const amount = previousAmount + variation;
     return {
         team: randomTeam,
-        amount: Math.max(1, Math.round(amount))
+        amount: Math.max(1, Math.round(amount)),
+        marketMove: marketMove // Include marketMove property
     };
 }
 
@@ -58,7 +58,7 @@ async function sendRandomInvestment() {
     try {
         const investment = generateRandomInvestment(previousAmount);
         previousAmount = investment.amount;
-        const response = await axios.post('https://market-mayhem-main.onrender.com/investment', investment);
+        await axios.post('http://localhost:5000/investment', investment); // Include marketMove property in the request body
         console.log('Random investment sent successfully:', investment);
     } catch (error) {
         console.error('Error sending random investment:', error);
