@@ -51,7 +51,7 @@ async function sendRandomInvestment() {
     try {
         const investment = generateRandomInvestment(previousAmount);
         previousAmount = investment.amount;
-        await axios.post('http://localhost:5000/investment', investment);
+        await axios.post('https://market-mayhem-main.onrender.com/investment', investment);
         console.log('Random investment sent successfully:', investment);
     } catch (error) {
         console.error('Error sending random investment:', error);
