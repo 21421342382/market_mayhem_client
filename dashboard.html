@@ -29,7 +29,7 @@
 
     <script>
         function updateCurrentMarketPoint() {
-            fetch('http://localhost:5000/current-market-point')
+            fetch('https://market-mayhem-main.onrender.com/current-market-point')
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('currentMarketPoint').textContent = data.currentMarketPoint;
