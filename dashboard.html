@@ -40,7 +40,7 @@
         }
 
         function sendBotAction(action) {
-            fetch(`http://localhost:3000/${action}`, { method: 'POST' })
+            fetch(`https://market-mayhem-client.onrender.com/${action}`, { method: 'POST' })
                 .then(response => {
                     if (response.ok) {
                         console.log(`Bot ${action}ed successfully.`);
@@ -64,7 +64,7 @@
 
         document.getElementById('applyMoveBtn').addEventListener('click', () => {
             const marketMove = document.getElementById('marketMoveSelect').value;
-            fetch('http://localhost:3000/apply-market-move', {
+            fetch('https://market-mayhem-client.onrender.com/apply-market-move', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -85,7 +85,7 @@
 
         document.getElementById('applyStartingPointBtn').addEventListener('click', () => {
             const startingAmount = document.getElementById('startingAmount').value;
-            fetch('http://localhost:3000/apply-starting-point', {
+            fetch('https://market-mayhem-client.onrender.com/apply-starting-point', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
