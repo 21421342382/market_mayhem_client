@@ -25,33 +25,26 @@
     <input type="number" id="startingAmount" placeholder="Enter starting amount">
     <button id="applyStartingPointBtn">Apply Starting Point</button>
 
-    <h2>Market Values</h2>
-    <div id="marketValues">
-        <p>Uptrend Market Value: <span id="uptrendMarketValue">0</span></p>
-        <p>Downtrend Market Value: <span id="downtrendMarketValue">0</span></p>
-    </div>
+    <h2>Current Market Point: <span id="currentMarketPoint">0</span></h2>
 
     <script>
-        // Function to fetch and update the current market values
-        function updateMarketValues() {
-            fetch('http://localhost:5000/current-market-value')
+        function updateCurrentMarketPoint() {
+            fetch('http://localhost:5000/current-market-point')
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById('uptrendMarketValue').textContent = data.uptrend;
-                    document.getElementById('downtrendMarketValue').textContent = data.downtrend;
+                    document.getElementById('currentMarketPoint').textContent = data.currentMarketPoint;
                 })
                 .catch(error => {
-                    console.error('Error fetching market values:', error);
+                    console.error('Error fetching current market point:', error);
                 });
         }
 
-        // Function to send bot control actions
         function sendBotAction(action) {
             fetch(`http://localhost:3000/${action}`, { method: 'POST' })
                 .then(response => {
                     if (response.ok) {
                         console.log(`Bot ${action}ed successfully.`);
-                        updateMarketValues(); // Update market values after bot action
+                        updateCurrentMarketPoint(); // Update market point after bot starts
                     } else {
                         console.error(`Failed to ${action} bot.`);
                     }
@@ -61,9 +54,7 @@
                 });
         }
 
-        // Event listeners for bot control buttons
         document.getElementById('startBtn').addEventListener('click', () => {
-            console.log("Start Bot button clicked."); // Debugging statement
             sendBotAction('start-bot');
         });
 
@@ -71,7 +62,6 @@
             sendBotAction('stop-bot');
         });
 
-        // Event listener for applying market move
         document.getElementById('applyMoveBtn').addEventListener('click', () => {
             const marketMove = document.getElementById('marketMoveSelect').value;
             fetch('http://localhost:3000/apply-market-move', {
@@ -84,7 +74,6 @@
             .then(response => {
                 if (response.ok) {
                     console.log('Market move applied successfully.');
-                    updateMarketValues(); // Update market values after applying move
                 } else {
                     console.error('Failed to apply market move.');
                 }
@@ -94,7 +83,6 @@
             });
         });
 
-        // Event listener for applying starting point
         document.getElementById('applyStartingPointBtn').addEventListener('click', () => {
             const startingAmount = document.getElementById('startingAmount').value;
             fetch('http://localhost:3000/apply-starting-point', {
@@ -116,11 +104,8 @@
             });
         });
 
-        // Initial update of market values
-        updateMarketValues();
-
-        // Periodically update market values every second
-        setInterval(updateMarketValues, 1000);
+        // Update market point every 60 seconds
+        setInterval(updateCurrentMarketPoint, 10000);
     </script>
 </body>
 </html>

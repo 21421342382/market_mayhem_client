@@ -1,7 +1,12 @@
+// bot.js
+const express = require('express');
 const axios = require('axios');
 
+const app = express();
+app.use(express.json());
+
 let botInterval;
-let previousAmount = 0;
+let previousAmount = 100; // Initial starting point
 let marketMove = 'normal';
 
 function startBot() {
@@ -14,33 +19,21 @@ function stopBot() {
     clearInterval(botInterval);
 }
 
-function generateRandomInvestment(previousAmount) {
+function generateRandomInvestment(previousAmount, marketMove) {
     const teams = ['Team A', 'Team B', 'Team C'];
     const randomTeam = teams[Math.floor(Math.random() * teams.length)];
 
-    let variation = (Math.random() - 0.5) * 20;
+    let variation = (Math.random() - 0.5) * 20; // Allow variation in any direction
 
     switch (marketMove) {
         case 'uptrend':
-            if (Math.random() < 0.7) { // 70% chance for uptrend
-                variation += Math.random() * 10 + 10;
-            } else { // 30% chance for downtrend
-                variation -= Math.random() * 10 + 10;
-            }
+            variation += Math.random() * 10 + 10; // Add positive variation in uptrend
             break;
         case 'downtrend':
-            if (Math.random() < 0.7) { // 70% chance for downtrend
-                variation -= Math.random() * 10 + 10;
-            } else { // 30% chance for uptrend
-                variation += Math.random() * 10 + 10;
-            }
+            variation -= Math.random() * 10 + 10; // Add negative variation in downtrend
             break;
         case 'bullish':
-            if (Math.random() < 0.5) { // 50% chance for uptrend
-                variation += Math.random() * 20 + 20;
-            } else { // 50% chance for downtrend
-                variation -= Math.random() * 10 + 10;
-            }
+            variation += Math.random() * 20 + 20; // Add positive variation in bullish
             break;
         default:
             break;
@@ -49,16 +42,16 @@ function generateRandomInvestment(previousAmount) {
     const amount = previousAmount + variation;
     return {
         team: randomTeam,
-        amount: Math.max(1, Math.round(amount)),
-        marketMove: marketMove // Include marketMove property
+        amount: Math.round(amount)
     };
 }
+
 
 async function sendRandomInvestment() {
     try {
         const investment = generateRandomInvestment(previousAmount);
         previousAmount = investment.amount;
-        await axios.post('http://localhost:5000/investment', investment); // Include marketMove property in the request body
+        await axios.post('http://localhost:5000/investment', investment);
         console.log('Random investment sent successfully:', investment);
     } catch (error) {
         console.error('Error sending random investment:', error);
